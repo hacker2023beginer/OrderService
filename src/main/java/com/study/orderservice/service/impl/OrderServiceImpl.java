@@ -88,7 +88,6 @@ public class OrderServiceImpl implements OrderService {
                     .bodyToMono(UserDto.class)
                     .block();
         } catch (Exception ex) {
-            System.out.println("WebClient failed: " + ex.getMessage());
             throw ex;
         }
     }
@@ -104,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
                         .queryParam("email", email)
                         .build())
                 .retrieve()
-                .bodyToMono(Boolean.class)   // <-- теперь читаем boolean
+                .bodyToMono(Boolean.class)
                 .block();
     }
 
