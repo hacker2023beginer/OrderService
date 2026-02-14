@@ -61,4 +61,12 @@
             <column name="item_id"/>
         </createIndex>
     </changeSet>
+    <changeSet id="2" author="you">
+        <addColumn tableName="orders">
+            <column name="user_email" type="varchar(255)"/>
+        </addColumn>
+        <createIndex indexName="idx_orders_user_email" tableName="orders">
+            <column name="user_email"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

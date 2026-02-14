@@ -1,10 +1,12 @@
 package com.study.orderservice.service;
 
 import com.study.orderservice.dto.OrderDto;
+import com.study.orderservice.dto.UserDto;
 import com.study.orderservice.entity.Order;
 import com.study.orderservice.exception.OrderServiceException;
 import com.study.orderservice.repository.OrderRepository;
 import com.study.orderservice.specification.OrderSpecification;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,4 +28,9 @@ public interface OrderService {
        Order updateOrderById(Long id, OrderDto dto);
 
        void deleteOrderById(Long id);
+
+        UserDto getUserByEmail(String email);
+
+       @CircuitBreaker(name = "userService", fallbackMethod = "fallbackValidateUser")
+       Boolean validateUser(Long userId, String email);
 }

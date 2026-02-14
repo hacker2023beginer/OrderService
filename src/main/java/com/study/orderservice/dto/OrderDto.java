@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -12,16 +13,40 @@ public class OrderDto {
 
     private Long userId;
 
+    @NotBlank
     private String status;
 
+    @PositiveOrZero
     private double totalPrice;
+
+    @Email
+    @NotBlank
+    private String email;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
+    private UserDto user;
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
