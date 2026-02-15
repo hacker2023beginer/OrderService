@@ -65,8 +65,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(dto.getStatus());
         order.setTotalPrice(dto.getTotalPrice());
         order.setUserId(dto.getUserId());
-        orderRepository.save(order);
-        return order;
+        return orderRepository.save(order);
     }
 
     @Override

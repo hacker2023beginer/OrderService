@@ -9,6 +9,8 @@ public class OrderItemDto {
 
     private Long id;
 
+    private Long orderId;
+
     private Long itemId;
 
     @PositiveOrZero
@@ -19,6 +21,14 @@ public class OrderItemDto {
 
     @NotNull
     private LocalDateTime updatedAt;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
     public Long getId() {
         return id;
