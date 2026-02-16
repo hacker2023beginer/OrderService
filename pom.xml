@@ -27,7 +27,13 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>23</java.version>
+		<maven.compiler.source>23</maven.compiler.source>
+		<maven.compiler.target>23</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.projectKey>hacker2023beginer_UserService</sonar.projectKey>
+		<sonar.organization>hacker2023beginer</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -127,6 +133,7 @@
 			<version>2.35.1</version>
 			<scope>test</scope>
 		</dependency>
+
 
 	</dependencies>
 
