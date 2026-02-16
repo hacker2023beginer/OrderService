@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
                     .bodyToMono(UserDto.class)
                     .block();
         } catch (Exception ex) {
-            throw ex;
+            throw new OrderServiceException("Connection is lost");
         }
     }
 

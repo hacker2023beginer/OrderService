@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.testcontainers.DockerClientFactory;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -68,12 +67,6 @@ class OrderControllerIntegrationTest extends BaseIntegrationTest {
         assertThat(id).isNotNull();
         assertThat(email).isEqualTo("test@mail.com");
     }
-
-    @Test
-    void testDockerConnection() {
-        DockerClientFactory.instance().client();
-    }
-
 
     @Test
     void getOrder_shouldReturnOrderWithUser() throws Exception {

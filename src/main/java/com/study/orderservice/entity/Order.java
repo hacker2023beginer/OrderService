@@ -1,6 +1,5 @@
 package com.study.orderservice.entity;
 
-import com.study.orderservice.dto.UserDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;

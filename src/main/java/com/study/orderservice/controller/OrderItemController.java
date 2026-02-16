@@ -1,8 +1,6 @@
 package com.study.orderservice.controller;
 
-import com.study.orderservice.dto.ItemDto;
 import com.study.orderservice.dto.OrderItemDto;
-import com.study.orderservice.entity.Item;
 import com.study.orderservice.entity.OrderItem;
 import com.study.orderservice.mapper.OrderItemMapper;
 import com.study.orderservice.service.OrderItemService;
