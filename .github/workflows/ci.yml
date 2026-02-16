@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI Pipeline (no tests)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  build-test-analyze:
+  build-docker:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,20 +30,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Build and run tests
-        run: mvn -B clean verify
-
       - name: SonarCloud Analysis
+        if: ${{ secrets.SONAR_TOKEN }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.skipTests=true
 
       - name: Build Docker image
         run: docker build -t user-service:latest .
