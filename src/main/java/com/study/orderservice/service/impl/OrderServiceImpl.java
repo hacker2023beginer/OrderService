@@ -8,6 +8,7 @@ import com.study.orderservice.repository.OrderRepository;
 import com.study.orderservice.service.OrderService;
 import com.study.orderservice.specification.OrderSpecification;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,12 +22,15 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final WebClient webClient = WebClient.builder() .baseUrl("http://localhost:8080") .build();
+    private final WebClient webClient;
 
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository,
+                            @Value("${user.service.url}") String userServiceUrl) {
         this.orderRepository = orderRepository;
+        this.webClient = WebClient.builder().baseUrl(userServiceUrl).build();
     }
+
 
     @Override
     @Transactional

@@ -1,8 +1,6 @@
 package com.study.orderservice.service;
 
-import com.study.orderservice.dto.ItemDto;
 import com.study.orderservice.dto.OrderItemDto;
-import com.study.orderservice.entity.Item;
 import com.study.orderservice.entity.OrderItem;
 
 public interface OrderItemService {
