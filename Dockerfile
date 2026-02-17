@@ -13,7 +13,7 @@ RUN ./mvnw dependency:go-offline
 COPY src src
 RUN ./mvnw package -DskipTests
 
-FROM eclipse-temurin:23-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
