@@ -1,16 +1,18 @@
 package com.study.orderservice.integration;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.jayway.jsonpath.JsonPath;
 import com.study.orderservice.dto.OrderDto;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -20,12 +22,28 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(WireMockConfig.class)
-@Testcontainers
 @SpringBootTest
 class OrderControllerIntegrationTest extends BaseIntegrationTest {
 
-    @Autowired
-    private WireMockServer wireMockServer;
+    static WireMockServer wireMockServer = new WireMockServer(
+            WireMockConfiguration.options().dynamicPort()
+    );
+
+    @DynamicPropertySource
+    static void overrideProps(DynamicPropertyRegistry registry) {
+        registry.add("user.service.url", () -> "http://localhost:" + wireMockServer.port());
+    }
+
+    @BeforeAll
+    static void startWireMock() {
+        wireMockServer.start();
+    }
+
+    @AfterAll
+    static void stopWireMock() {
+        wireMockServer.stop();
+    }
+
 
     @Test
     void createOrder_shouldReturnOrderWithUser() throws Exception {
@@ -60,8 +78,9 @@ class OrderControllerIntegrationTest extends BaseIntegrationTest {
                 .andReturn();
 
         String json = result.getResponse().getContentAsString();
+        Number numberId = JsonPath.read(json, "$.id");
+        Long id = numberId.longValue();
 
-        Long id = JsonPath.read(json, "$.id");
         String email = JsonPath.read(json, "$.user.email");
 
         assertThat(id).isNotNull();
@@ -94,9 +113,10 @@ class OrderControllerIntegrationTest extends BaseIntegrationTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andReturn();
 
-        Long id = JsonPath.read(createResult.getResponse().getContentAsString(), "$.id");
+        Number numberId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.id");
+        Long id = numberId.longValue();
 
-        mockMvc.perform((RequestBuilder) get("/orders/" + id))
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/orders/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.user.email").value("test@mail.com"));
