@@ -6,6 +6,8 @@ import com.study.orderservice.entity.Order;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,8 +25,8 @@ public interface OrderService {
 
        void deleteOrderById(Long id);
 
-        UserDto getUserByEmail(String email);
+        UserDto getUserByEmail(String email, String request);
 
        @CircuitBreaker(name = "userService", fallbackMethod = "fallbackValidateUser")
-       Boolean validateUser(Long userId, String email);
+       Boolean validateUser(Long userId, String email, String authHeader);
 }

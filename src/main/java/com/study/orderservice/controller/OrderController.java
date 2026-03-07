@@ -1,16 +1,20 @@
 package com.study.orderservice.controller;
 
 import com.study.orderservice.dto.OrderDto;
+import com.study.orderservice.dto.OrderRequestDto;
 import com.study.orderservice.dto.UserDto;
 import com.study.orderservice.entity.Order;
 import com.study.orderservice.exception.OrderServiceException;
 import com.study.orderservice.mapper.OrderMapper;
 import com.study.orderservice.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,18 +31,19 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<OrderDto> create(@RequestBody @Valid OrderDto dto){
-        Boolean valid = orderService.validateUser(dto.getUserId(), dto.getEmail());
+    @PostMapping("/create")
+    public ResponseEntity<OrderDto> create(@RequestBody @Valid OrderRequestDto dto, HttpServletRequest request){
+        Boolean valid = orderService.validateUser(dto.getUserId(), dto.getEmail(), request.getHeader(HttpHeaders.AUTHORIZATION));
         if (valid == null || !valid){
             throw new OrderServiceException("User not found");
         }
-
+        System.out.println("Start creating");
         Order order = new Order();
-        orderMapper.updateOrderFromDto(dto, order);
+        orderMapper.updateOrderFromRequestDto(dto, order);
         Order savedOrder = orderService.create(order);
         OrderDto orderDto = orderMapper.toDto(savedOrder);
-        UserDto userDto = orderService.getUserByEmail(order.getEmail());
+        System.out.println("AUTH HEADER: " + request.getHeader(HttpHeaders.AUTHORIZATION));
+        UserDto userDto = orderService.getUserByEmail(order.getEmail(), request.getHeader(HttpHeaders.AUTHORIZATION));
         orderDto.setUser(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

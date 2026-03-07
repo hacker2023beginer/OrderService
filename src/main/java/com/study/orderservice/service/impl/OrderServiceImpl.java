@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -80,13 +82,14 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
-    public UserDto getUserByEmail(String email) {
+    public UserDto getUserByEmail(String email, String authHeader) {
         try {
             return webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/users/by-email")
                             .queryParam("email", email)
                             .build())
+                    .header(HttpHeaders.AUTHORIZATION, authHeader)
                     .retrieve()
                     .bodyToMono(UserDto.class)
                     .block();
@@ -99,22 +102,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @CircuitBreaker(name = "userService", fallbackMethod = "fallbackValidateUser")
-    public Boolean validateUser(Long userId, String email) {
+    public Boolean validateUser(Long userId, String email, String authHeader) {
         return webClient.get()
                 .uri(uri -> uri.path("/users/validate")
                         .queryParam("userId", userId)
                         .queryParam("email", email)
                         .build())
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
     }
 
-    public Boolean fallbackValidateUser(Long userId, String email, Throwable t) {
+    public Boolean fallbackValidateUser(Long userId, String email, String authHeader, Throwable t) {
         return false;
     }
 
-    public UserDto fallbackGetUserByEmail(String email, Throwable t) {
+    public UserDto fallbackGetUserByEmail(String email, String authHeader, Throwable t) {
         UserDto dto = new UserDto();
         dto.setEmail(email);
         dto.setName("Unknown user");
