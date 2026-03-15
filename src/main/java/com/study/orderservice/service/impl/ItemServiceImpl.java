@@ -32,7 +32,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public Item updateItemById(Long id, ItemDto dto) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new ItemServiceException("User not found"));
+                .orElseThrow(() -> new ItemServiceException("Item not found"));
         item.setName(dto.getName());
         item.setPrice(dto.getPrice());
         return itemRepository.save(item);

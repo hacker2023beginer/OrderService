@@ -27,7 +27,7 @@ class OrderServiceValidateUserIntegrationTest extends BaseIntegrationTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody("true")));
 
-        Boolean result = orderService.validateUser(1L, "anna@example.com");
+        Boolean result = orderService.validateUser(1L, "anna@example.com", "Bearer test-token");
         assertThat(result).isTrue();
     }
 
@@ -36,7 +36,7 @@ class OrderServiceValidateUserIntegrationTest extends BaseIntegrationTest {
         wireMockServer.stubFor(get(urlPathEqualTo("/users/validate"))
                 .willReturn(aResponse().withStatus(500)));
 
-        Boolean result = orderService.validateUser(1L, "test@mail.com");
+        Boolean result = orderService.validateUser(1L, "test@mail.com", "Bearer test-token");
 
         assertThat(result).isFalse();
     }
