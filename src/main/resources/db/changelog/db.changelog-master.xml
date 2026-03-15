@@ -33,10 +33,15 @@
             <column name="deleted" type="boolean"/>
             <column name="created_at" type="timestamp"/>
             <column name="updated_at" type="timestamp"/>
+            <column name="user_email" type="varchar(255)"/>
         </createTable>
 
         <createIndex indexName="idx_orders_user_id" tableName="orders">
             <column name="user_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_orders_user_email" tableName="orders">
+            <column name="user_email"/>
         </createIndex>
 
         <createTable tableName="order_items">
