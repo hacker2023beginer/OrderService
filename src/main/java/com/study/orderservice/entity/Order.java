@@ -20,6 +20,9 @@ public class Order {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "user_email", nullable = false)
+    private String email;
+
     @Column(name = "status")
     private String status;
 
@@ -43,6 +46,14 @@ public class Order {
             orphanRemoval = true
     )
     private List<OrderItem> items = new ArrayList<>();
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public List<OrderItem> getItems() {
         return items;
