@@ -1,0 +1,69 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="1" author="you">
+        <createTable tableName="items">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="price" type="double"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
+
+        <createIndex indexName="idx_items_name" tableName="items">
+            <column name="name"/>
+        </createIndex>
+
+        <createTable tableName="orders">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)"/>
+            <column name="total_price" type="double"/>
+            <column name="deleted" type="boolean"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+            <column name="user_email" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="idx_orders_user_id" tableName="orders">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_orders_user_email" tableName="orders">
+            <column name="user_email"/>
+        </createIndex>
+
+        <createTable tableName="order_items">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_order" references="orders(id)"/>
+            </column>
+            <column name="item_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_item" references="items(id)"/>
+            </column>
+            <column name="quantity" type="bigint"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
+
+        <createIndex indexName="idx_order_items_order_id" tableName="order_items">
+            <column name="order_id"/>
+        </createIndex>
+        <createIndex indexName="idx_order_items_item_id" tableName="order_items">
+            <column name="item_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
