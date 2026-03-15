@@ -29,6 +29,13 @@ public class GlobalExceptionHandler {
                 .body(error(HttpStatus.NOT_FOUND, ex.getMessage()));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
     private Map<String, Object> error(HttpStatus status, String message) {
         return Map.of(
                 "timestamp", LocalDateTime.now(),

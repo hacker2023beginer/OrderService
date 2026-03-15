@@ -1,6 +1,5 @@
 package com.study.orderservice.service.impl;
 
-import com.study.orderservice.dto.ItemDto;
 import com.study.orderservice.dto.OrderItemDto;
 import com.study.orderservice.entity.Item;
 import com.study.orderservice.entity.Order;
