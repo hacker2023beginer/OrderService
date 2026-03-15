@@ -1,6 +1,7 @@
 package com.study.orderservice.controller;
 
 import com.study.orderservice.dto.ItemDto;
+import com.study.orderservice.dto.ItemRequestDto;
 import com.study.orderservice.entity.Item;
 import com.study.orderservice.mapper.ItemMapper;
 import com.study.orderservice.service.ItemService;
@@ -22,7 +23,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemDto> create(@RequestBody @Valid ItemDto itemDto){
+    public ResponseEntity<ItemDto> create(@RequestBody @Valid ItemRequestDto itemDto){
         Item item = itemService.create(itemMapper.toEntity(itemDto));
         return ResponseEntity
                 .status(HttpStatus.CREATED)

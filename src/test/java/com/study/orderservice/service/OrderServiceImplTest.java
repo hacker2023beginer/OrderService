@@ -3,6 +3,8 @@ package com.study.orderservice.service;
 import com.study.orderservice.dto.OrderDto;
 import com.study.orderservice.entity.Order;
 import com.study.orderservice.exception.OrderServiceException;
+import com.study.orderservice.mapper.OrderMapper;
+import com.study.orderservice.mapper.OrderMapperImpl;
 import com.study.orderservice.repository.OrderRepository;
 import com.study.orderservice.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -114,7 +116,9 @@ class OrderServiceImplTest {
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(orderRepository.save(existing)).thenReturn(existing);
+        OrderMapper mapper = new OrderMapperImpl();
 
+        OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, "http://localhost", mapper);
         Order result = orderService.updateOrderById(1L, dto);
 
         assertThat(result.getStatus()).isEqualTo("NEW");
