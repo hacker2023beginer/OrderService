@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 public class OrderSpecification {
 
+    private OrderSpecification() {
+    }
+
     public static Specification<Order> createdAfter(LocalDateTime from) {
         return (root, query, cb) ->
                 from == null ? null : cb.greaterThanOrEqualTo(root.get("createdAt"), from);
@@ -18,10 +21,12 @@ public class OrderSpecification {
     }
 
     public static Specification<Order> hasStatus(String status) {
-        return (root, query, cb) ->
-                status == null || status.isEmpty()
-                        ? null
-                        : root.get("status").in(status);
+        return (root, query, cb) -> {
+            if (status == null) {
+                return null;
+            }
+            return cb.equal(root.get("status"), status);
+        };
     }
 
     public static Specification<Order> notDeleted() {

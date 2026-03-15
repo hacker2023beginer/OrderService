@@ -24,6 +24,9 @@ public class OrderRequestDto {
         this.email = email;
     }
 
+    public OrderRequestDto() {
+    }
+
     public Long getUserId() {
         return userId;
     }

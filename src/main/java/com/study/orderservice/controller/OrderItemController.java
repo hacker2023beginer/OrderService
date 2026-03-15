@@ -1,6 +1,7 @@
 package com.study.orderservice.controller;
 
 import com.study.orderservice.dto.OrderItemDto;
+import com.study.orderservice.dto.OrderItemRequestDto;
 import com.study.orderservice.entity.OrderItem;
 import com.study.orderservice.mapper.OrderItemMapper;
 import com.study.orderservice.service.OrderItemService;
@@ -21,7 +22,7 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderItemDto> create(@RequestBody @Valid OrderItemDto orderItemDto){
+    public ResponseEntity<OrderItemDto> create(@RequestBody @Valid OrderItemRequestDto orderItemDto){
         OrderItem orderItem = orderItemService.create(orderItemMapper.toEntity(orderItemDto));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -35,7 +36,8 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderItemDto> updateItemById(@PathVariable Long id, @RequestBody OrderItemDto orderItemDto){
+    public ResponseEntity<OrderItemDto> updateItemById(@PathVariable Long id, @RequestBody OrderItemRequestDto orderItemRequestDto){
+        OrderItemDto orderItemDto = orderItemMapper.toDto(orderItemMapper.toEntity(orderItemRequestDto));
         OrderItem item = orderItemService.updateOrderItemById(id, orderItemDto);
         return ResponseEntity.ok(orderItemMapper.toDto(item));
     }

@@ -27,6 +27,6 @@ USER appuser
 
 #ENV SPRING_PROFILES_ACTIVE=docker
 
-EXPOSE 8081
+EXPOSE 8083
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

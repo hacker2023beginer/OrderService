@@ -98,7 +98,7 @@ class ItemServiceImplTest {
 
         assertThatThrownBy(() -> itemService.updateItemById(1L, dto))
                 .isInstanceOf(ItemServiceException.class)
-                .hasMessage("User not found");
+                .hasMessage("Item not found");
     }
 
     @Test
