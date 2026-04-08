@@ -31,7 +31,7 @@ spec:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: kafka-svc:9092
 
-          # ✅ Liveness probe
+
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -39,7 +39,7 @@ spec:
             initialDelaySeconds: 100
             periodSeconds: 10
 
-          # ✅ Readiness probe
+
           readinessProbe:
             httpGet:
               path: /actuator/health
