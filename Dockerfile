@@ -1,4 +1,5 @@
-FROM eclipse-temurin:23-jdk-alpine AS builder
+# Stage 1: build
+FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
 
@@ -9,10 +10,10 @@ COPY pom.xml .
 RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
-
 COPY src src
-RUN ./mvnw package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
+# Stage 2: runtime
 FROM eclipse-temurin:21-jre-alpine
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -24,8 +25,6 @@ COPY --from=builder /app/target/orderservice-0.0.1-SNAPSHOT.jar app.jar
 RUN chown -R appuser:appgroup /app
 
 USER appuser
-
-#ENV SPRING_PROFILES_ACTIVE=docker
 
 EXPOSE 8083
 

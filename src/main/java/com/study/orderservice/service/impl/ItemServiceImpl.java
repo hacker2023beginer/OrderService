@@ -8,6 +8,8 @@ import com.study.orderservice.service.ItemService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
@@ -26,6 +28,11 @@ public class ItemServiceImpl implements ItemService {
     public Item getItemById(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemServiceException("Item not found"));
+    }
+
+    @Override
+    public List<Item> getItems(){
+        return itemRepository.findAll();
     }
 
     @Override

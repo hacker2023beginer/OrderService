@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/items")
@@ -34,6 +36,18 @@ public class ItemController {
     public ResponseEntity<ItemDto> getById(@PathVariable Long id){
         Item item = itemService.getItemById(id);
         return ResponseEntity.ok(itemMapper.toDto(item));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ItemDto>> getItems(){
+        List<Item> items = itemService.getItems();
+        return ResponseEntity.ok(
+                items.stream()
+                .map(item -> {
+                    ItemDto dto = itemMapper.toDto(item);
+                    return dto;
+                })
+                .toList());
     }
 
     @PutMapping("/{id}")
